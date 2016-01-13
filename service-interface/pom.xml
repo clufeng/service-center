@@ -13,6 +13,10 @@
     <artifactId>service-interface</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+
+    </dependencies>
+
     <build>
         <finalName>service-interface</finalName>
         <resources>
@@ -31,6 +35,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
