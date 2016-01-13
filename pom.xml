@@ -6,7 +6,7 @@
 
     <groupId>com.mcloud.rpc</groupId>
     <artifactId>service-center</artifactId>
-    <version>1.0.0</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -16,7 +16,7 @@
     </scm>
 
     <modules>
-        <module>serivce-interface</module>
+        <module>service-interface</module>
         <module>service-impl</module>
     </modules>
 
