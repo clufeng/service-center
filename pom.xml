@@ -12,7 +12,7 @@
     <scm>
         <connection>scm:git@github.com:clufeng/service-center.git</connection>
         <developerConnection>scm:git@github.com:clufeng/service-center.git</developerConnection>
-        <url>https://github.com/clufeng/service-center.git</url>
+        <url>https://github.com/clufeng/service-center/tree/master</url>
     </scm>
 
     <modules>
@@ -22,22 +22,53 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.zeroc</groupId>
             <artifactId>ice</artifactId>
             <version>${com.zeroc.ice.versioin}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
         <repository>
             <id>zeroc</id>
             <url>https://repo.zeroc.com/nexus/content/repositories/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <layout>default</layout>
         </repository>
     </repositories>
 
@@ -58,6 +89,8 @@
 
     <properties>
         <com.zeroc.ice.versioin>3.6.1</com.zeroc.ice.versioin>
+        <junit.version>4.11</junit.version>
+        <log4j2.version>2.5</log4j2.version>
     </properties>
 
 </project>
