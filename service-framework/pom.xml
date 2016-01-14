@@ -10,24 +10,25 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>service-impl</artifactId>
+    <artifactId>service-framework</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>com.mcloud.rpc</groupId>
-            <artifactId>service-interface</artifactId>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>2.9.1</version>
         </dependency>
 
         <dependency>
-            <groupId>com.mcloud.rpc</groupId>
-            <artifactId>service-framework</artifactId>
+            <groupId>com.zeroc</groupId>
+            <artifactId>icebox</artifactId>
+            <version>${com.zeroc.ice.versioin}</version>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>service-impl</finalName>
+        <finalName>service-framework</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -44,5 +45,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>
