@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * Created by duduchao on 16/1/14
+ * Created by hubo on 16/1/14
  */
 public class ZookeeperClientFactory {
 

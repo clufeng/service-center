@@ -9,7 +9,6 @@ import net.rubyeye.xmemcached.utils.AddrUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -78,8 +77,29 @@ public class MemcachedUtils {
         memcachedClient.shutdown();
     }
 
+
+    public static long incr(String key, long delta, int initValue) {
+        try {
+            return memcachedClient.incr(key, delta, initValue);
+        } catch (TimeoutException | InterruptedException | MemcachedException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public static long decr(String key, long delta, int initValue) {
+        try {
+            return memcachedClient.decr(key, delta, initValue);
+        } catch (TimeoutException | InterruptedException | MemcachedException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
     public static void main(String[] args) throws InterruptedException, MemcachedException, TimeoutException, IOException {
-        MemcachedUtils.add("9999", Arrays.asList("111","222"), 0);
+//        MemcachedUtils.add("9999", Arrays.asList("111","222"), 0);
 //            int threadCount = 1;
 //            CountDownLatch l = new CountDownLatch(threadCount);
 //            ExecutorService exec = Executors.newFixedThreadPool(threadCount);
@@ -100,9 +120,9 @@ public class MemcachedUtils {
 //            System.out.println(t2-t1);
 //            MemcachedUtils2.remove("99999");
 //            List<String> value = MemcachedUtils2.get("99999");
-//            System.out.println(value);
-            MemcachedUtils.destory();
+//            System.out.println(MemcachedUtils.remove("id_generator"));
+//            MemcachedUtils.destory();
 //            exec.shutdown();
-        }
+    }
 
 }

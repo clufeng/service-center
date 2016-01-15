@@ -3,9 +3,7 @@ package com.yonyou.mcloud.service.interceptor;
 import Ice.*;
 import Ice.Object;
 import com.yonyou.mcloud.service.context.ServiceContext;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.yonyou.mcloud.service.monitor.ServiceMonitor;
 
 /**
  * Created by hubo on 16/1/14
@@ -13,8 +11,6 @@ import java.util.concurrent.Executors;
 public class ServiceDispatchInterceptor extends DispatchInterceptor{
 
     private static ServiceContext context = new ServiceContext();
-
-    private static ExecutorService exec = Executors.newCachedThreadPool();
 
     public ServiceDispatchInterceptor(Identity id, Object service) {
         context.addService(id, service);
@@ -35,12 +31,9 @@ public class ServiceDispatchInterceptor extends DispatchInterceptor{
 
         final long execMillisTime = System.currentTimeMillis() - startTime;
 
-        exec.execute(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(startTime + "--" + id + ":" + op + "--" + execMillisTime);
-            }
-        });
+        if(!op.equals("ice_isA")) {
+            ServiceMonitor.getInstance().recordServiceExecLogAsyn(id, op, startTime, execMillisTime);
+        }
 
         return result;
     }
