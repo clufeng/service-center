@@ -17,11 +17,6 @@ public class DistributeSharedLockService extends AbstractService {
     }
 
     @Override
-    public String getIdentityStr() {
-        return "LockServiceAdapter";
-    }
-
-    @Override
     public void afterStop() {
         super.afterStop();
         lockImpl.destroy();

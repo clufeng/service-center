@@ -6,11 +6,6 @@ import Ice.ObjectAdapter;
 import IceBox.Service;
 import com.yonyou.mcloud.service.interceptor.ServiceDispatchInterceptor;
 import com.yonyou.mcloud.service.monitor.ServiceMonitor;
-import com.yonyou.mcloud.service.util.ZookeeperClientFactory;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.CreateMode;
-
-import java.net.InetAddress;
 
 /**
  * <p>抽象IceBox服务</p>
@@ -20,11 +15,11 @@ import java.net.InetAddress;
  */
 public abstract class AbstractService implements Service {
 
-    private CuratorFramework client;
-
     private ObjectAdapter adapter;
 
-    private ServiceMonitor serviceMonitor;
+    private ServiceMonitor monitor = ServiceMonitor.getInstance();
+
+    private Identity id;
 
     private boolean isMonitor = true;
 
@@ -32,10 +27,10 @@ public abstract class AbstractService implements Service {
 
         adapter = c.createObjectAdapter(s);
 
-        Identity id = c.stringToIdentity(s);
+        id = c.stringToIdentity(s);
 
         if(isMonitor()) {
-            adapter.add(new ServiceDispatchInterceptor(id, createServiceObject()), id);
+            adapter.add(ServiceDispatchInterceptor.wrapService(id, createServiceObject()), id);
         } else {
             adapter.add(createServiceObject(), id);
         }
@@ -50,30 +45,14 @@ public abstract class AbstractService implements Service {
 
     public abstract Ice.Object createServiceObject();
 
-    public abstract String getIdentityStr();
-
     @Override
     public void start(String s, Communicator c, String[] args) {
-
-        client = ZookeeperClientFactory.create();
-        client.start();
 
         beginStart(s, c, args);
         _start(s, c, args);
         afterStart(s, c, args);
 
-        try {
-
-            String hostAddr = InetAddress.getLocalHost().getHostAddress();
-
-            client.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
-                    .forPath("/mcloud/service/", (getIdentityStr()
-                    + ":" + this.getClass().getName() + ":" + hostAddr).getBytes());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            client.close();
-        }
+        monitor.registerService(id, this);
     }
 
     @Override
@@ -83,10 +62,9 @@ public abstract class AbstractService implements Service {
         _stop();
         afterStop();
 
-        if(client != null) {
-            client.close();
-        }
+        ServiceDispatchInterceptor.removeService(id);
 
+        monitor.unregisterService(id);
     }
 
     protected void beginStart(String s, Communicator c, String[] args) {}

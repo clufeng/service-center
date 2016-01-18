@@ -29,6 +29,7 @@ public class IdGeneratorImpl extends _IdGeneratorDisp{
         Thread monitorThread = new Thread(new MonitorWorker());
         monitorThread.setDaemon(true);
         monitorThread.start();
+        System.out.println("----------------- IdGenerator started !");
     }
 
     @Override

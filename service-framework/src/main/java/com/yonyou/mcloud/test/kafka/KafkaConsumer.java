@@ -2,11 +2,11 @@ package com.yonyou.mcloud.test.kafka;
 
 import com.yonyou.mcloud.service.logger.ServiceExecLog;
 import com.yonyou.mcloud.service.monitor.ServiceMonitor;
+import com.yonyou.mcloud.service.util.JsonDecoder;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.message.MessageAndMetadata;
-import kafka.serializer.DefaultDecoder;
 import kafka.serializer.StringDecoder;
 import kafka.utils.VerifiableProperties;
 
@@ -44,24 +44,38 @@ public class KafkaConsumer {
     }
 
     void consume() {
+
         Map<String, Integer> topicCountMap = new HashMap<>();
+
         topicCountMap.put(ServiceMonitor.LOG_TOPIC, 1);
 
         StringDecoder keyDecoder = new StringDecoder(new VerifiableProperties());
-        DefaultDecoder valueDecoder = new DefaultDecoder(new VerifiableProperties());
+        JsonDecoder<ServiceExecLog> valueDecoder = new JsonDecoder<>(ServiceExecLog.class);
 
-        Map<String, List<KafkaStream<String, byte[]>>> consumerMap =
+        Map<String, List<KafkaStream<String, ServiceExecLog>>> consumerMap =
                 consumer.createMessageStreams(topicCountMap,keyDecoder, valueDecoder);
 
-        KafkaStream<String, byte[]> stream = consumerMap.get(ServiceMonitor.LOG_TOPIC).get(0);
+        KafkaStream<String, ServiceExecLog> stream = consumerMap.get(ServiceMonitor.LOG_TOPIC).get(0);
 
-        for (MessageAndMetadata<String, byte[]> message : stream) {
-
+        for (MessageAndMetadata<String, ServiceExecLog> message : stream) {
+            System.out.println(message.message());
         }
+
+    }
+
+    public void close() {
+        consumer.shutdown();
     }
 
     public static void main(String[] args) {
-        new KafkaConsumer().consume();
+        final KafkaConsumer c = new KafkaConsumer();
+        c.consume();
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                c.close();
+            }
+        }));
     }
 
 }

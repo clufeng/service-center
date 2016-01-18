@@ -67,4 +67,21 @@ public class ServiceExecLog implements Serializable {
         this.execTime = execTime;
     }
 
+
+    public String toMessage() {
+        return ip + "-" + hostName + "-" + name
+                + "-" + op + "-" + startTime + "-" + execTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceExecLog{" +
+                "ip='" + ip + '\'' +
+                ", hostName='" + hostName + '\'' +
+                ", name='" + name + '\'' +
+                ", op='" + op + '\'' +
+                ", startTime=" + startTime +
+                ", execTime=" + execTime +
+                '}';
+    }
 }
