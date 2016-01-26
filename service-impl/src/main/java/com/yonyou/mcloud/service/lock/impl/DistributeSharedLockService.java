@@ -17,8 +17,15 @@ public class DistributeSharedLockService extends AbstractService {
     }
 
     @Override
+    public String getVersion() {
+        return "1.0.0";
+    }
+
+    @Override
     public void afterStop() {
         super.afterStop();
         lockImpl.destroy();
     }
+
+
 }

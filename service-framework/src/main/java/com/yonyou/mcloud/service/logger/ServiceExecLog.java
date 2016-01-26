@@ -1,10 +1,13 @@
 package com.yonyou.mcloud.service.logger;
 
+import org.msgpack.annotation.Message;
+
 import java.io.Serializable;
 
 /**
  * Created by hubo on 16/1/15
  */
+@Message
 public class ServiceExecLog implements Serializable {
 
     private String ip;

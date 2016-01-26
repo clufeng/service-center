@@ -1,4 +1,4 @@
-package com.yonyou.mcloud.service.util;
+package com.yonyou.mcloud.zookeeper.impl;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 /**
  * Created by hubo on 16/1/14
  */
-public class ZookeeperClientFactory {
+public class CuratorZookeeperClientFactory {
 
     public static final String CONNECT_STR= "connect_str";
 

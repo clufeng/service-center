@@ -3,7 +3,7 @@ package com.yonyou.mcloud.service.lock.impl;
 import Ice.Current;
 import com.yonyou.mcloud.service.lock.LockException;
 import com.yonyou.mcloud.service.lock._DistributedSharedLockDisp;
-import com.yonyou.mcloud.service.util.ZookeeperClientFactory;
+import com.yonyou.mcloud.zookeeper.impl.CuratorZookeeperClientFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
@@ -24,7 +24,7 @@ public class DistributedSharedLockImpl extends _DistributedSharedLockDisp {
     private static Logger log = LoggerFactory.getLogger(DistributedSharedLockImpl.class);
 
     public DistributedSharedLockImpl() {
-        client = ZookeeperClientFactory.create();
+        client = CuratorZookeeperClientFactory.create();
         client.start();
         lock = new InterProcessMutex(client, "/mcloud/lcok");
     }

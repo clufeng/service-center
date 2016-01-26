@@ -1,24 +1,24 @@
 package com.yonyou.mcloud.service.monitor;
 
-import Ice.Identity;
+import Ice.Communicator;
+import IceGrid.*;
+import com.yonyou.mcloud.RegistryMeta;
+import com.yonyou.mcloud.registry.RegistryAgent;
+import com.yonyou.mcloud.registry.impl.zk.ZookeeperRegistryAgent;
 import com.yonyou.mcloud.service.AbstractService;
 import com.yonyou.mcloud.service.logger.ServiceExecLog;
-import com.yonyou.mcloud.service.util.ZookeeperClientFactory;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
  */
 public class ServiceMonitor {
 
-    public static final String LOG_TOPIC = "service_log_topic";
+    public static final String LOG_TOPIC = "service_log_topic_msgpack";
 
     private static final String service_zk_node_path="/mcloud/service/";
 
@@ -40,7 +40,9 @@ public class ServiceMonitor {
 
     private Producer<String, ServiceExecLog> logProducer;
 
-    private Map<Identity, CuratorFramework> zkClientMap;
+    private RegistryAgent agent;
+
+    private String hostAddr;
 
     private void initLogProducer() {
         Properties props = new Properties();
@@ -55,12 +57,17 @@ public class ServiceMonitor {
         }
 
         logProducer = new Producer<>(new ProducerConfig(props));
-
-        zkClientMap = new ConcurrentHashMap<>();
     }
 
     private ServiceMonitor() {
         exec = Executors.newCachedThreadPool();
+        agent = new ZookeeperRegistryAgent(service_zk_node_path);
+        try {
+            hostAddr = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.warn("unknown host");
+            hostAddr = "0.0.0.0";
+        }
         initLogProducer();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
@@ -70,33 +77,20 @@ public class ServiceMonitor {
         }));
     }
 
-    public synchronized void registerService(Identity id, AbstractService service) {
+    public synchronized void registerService(AbstractService service) {
+        RegistryMeta meta = new RegistryMeta(hostAddr, service.getClass().getName(), service.getVersion());
 
-        if(zkClientMap.containsKey(id)) {
-            log.warn("服务[{}]注册!", id.name);
+        if (agent.isRegistered(meta)) {
+            log.warn("服务[{}]已注册!", meta);
             return;
         }
-
-        CuratorFramework zkClient = ZookeeperClientFactory.create();
-        zkClient.start();
-
-        try {
-            String hostAddr = InetAddress.getLocalHost().getHostAddress();
-            zkClient.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
-                    .forPath(service_zk_node_path, (id.name
-                            + ":" + service.getClass().getName() + ":" + hostAddr).getBytes());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            zkClient.close();
-        }
-
-        zkClientMap.put(id, zkClient);
+        agent.register(meta);
     }
 
-    public synchronized void unregisterService(Identity id) {
-        CuratorFramework zkClient = zkClientMap.get(id);
-        if(zkClient != null) {
-            zkClient.close();
+    public synchronized void unregisterService(AbstractService service) {
+        RegistryMeta meta = new RegistryMeta(hostAddr, service.getClass().getName(), service.getVersion());
+        if(agent.isRegistered(meta)) {
+            agent.unregister(meta);
         }
     }
 
@@ -114,17 +108,7 @@ public class ServiceMonitor {
 
     public void close() {
         logProducer.close();
-
-        if(zkClientMap.size() > 0) {
-            for (CuratorFramework zkClient : zkClientMap.values()) {
-                if(zkClient != null) {
-                    zkClient.close();
-                }
-            }
-        }
-
-        zkClientMap.clear();
-
+        agent.close();
         exec.shutdown();
     }
 
@@ -159,6 +143,26 @@ public class ServiceMonitor {
                 logProducer.send(new KeyedMessage<String, ServiceExecLog>(LOG_TOPIC, log));
             }
         });
+    }
+
+
+    public static void main(String[] args) throws PermissionDeniedException {
+        Communicator ic = Ice.Util.initialize(new String[]{"--Ice.Default.Locator=IceGrid/Locator:tcp -h 192.168.20.17 -p 4061:tcp -h 192.168.20.18 -p 4061"});
+
+        RegistryPrx r = RegistryPrxHelper.checkedCast(ic.stringToProxy("IceGrid/Registry"));
+
+        AdminSessionPrx sessionPrx = r.createAdminSession("test","test");
+
+        AdminPrx admin = sessionPrx.getAdmin();
+
+        System.out.println(admin.getObjectInfosByType(null).length);
+
+        System.out.println(Arrays.toString(admin.getAllAdapterIds()));
+
+        sessionPrx.destroy();
+
+        ic.shutdown();
+        ic.destroy();
     }
 
 

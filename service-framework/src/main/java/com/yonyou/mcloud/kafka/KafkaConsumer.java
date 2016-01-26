@@ -1,8 +1,8 @@
-package com.yonyou.mcloud.test.kafka;
+package com.yonyou.mcloud.kafka;
 
 import com.yonyou.mcloud.service.logger.ServiceExecLog;
 import com.yonyou.mcloud.service.monitor.ServiceMonitor;
-import com.yonyou.mcloud.service.util.JsonDecoder;
+import com.yonyou.mcloud.service.util.MsgPackDecoder;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
@@ -50,7 +50,7 @@ public class KafkaConsumer {
         topicCountMap.put(ServiceMonitor.LOG_TOPIC, 1);
 
         StringDecoder keyDecoder = new StringDecoder(new VerifiableProperties());
-        JsonDecoder<ServiceExecLog> valueDecoder = new JsonDecoder<>(ServiceExecLog.class);
+        MsgPackDecoder<ServiceExecLog> valueDecoder = new MsgPackDecoder<>(ServiceExecLog.class);
 
         Map<String, List<KafkaStream<String, ServiceExecLog>>> consumerMap =
                 consumer.createMessageStreams(topicCountMap,keyDecoder, valueDecoder);

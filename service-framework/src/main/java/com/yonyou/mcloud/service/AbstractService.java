@@ -45,6 +45,8 @@ public abstract class AbstractService implements Service {
 
     public abstract Ice.Object createServiceObject();
 
+    public abstract String getVersion();
+
     @Override
     public void start(String s, Communicator c, String[] args) {
 
@@ -52,7 +54,7 @@ public abstract class AbstractService implements Service {
         _start(s, c, args);
         afterStart(s, c, args);
 
-        monitor.registerService(id, this);
+        monitor.registerService(this);
     }
 
     @Override
@@ -61,10 +63,8 @@ public abstract class AbstractService implements Service {
         beginStop();
         _stop();
         afterStop();
-
         ServiceDispatchInterceptor.removeService(id);
-
-        monitor.unregisterService(id);
+        monitor.unregisterService(this);
     }
 
     protected void beginStart(String s, Communicator c, String[] args) {}

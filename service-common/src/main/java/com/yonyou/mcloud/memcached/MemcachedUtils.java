@@ -1,4 +1,4 @@
-package com.yonyou.mcloud.service.util;
+package com.yonyou.mcloud.memcached;
 
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.MemcachedClientBuilder;
@@ -97,32 +97,4 @@ public class MemcachedUtils {
 
         return 0;
     }
-
-    public static void main(String[] args) throws InterruptedException, MemcachedException, TimeoutException, IOException {
-//        MemcachedUtils.add("9999", Arrays.asList("111","222"), 0);
-//            int threadCount = 1;
-//            CountDownLatch l = new CountDownLatch(threadCount);
-//            ExecutorService exec = Executors.newFixedThreadPool(threadCount);
-//            long t1 = System.currentTimeMillis();
-//            for (int i = 0; i < threadCount; i++) {
-//                exec.execute(() -> {
-//                    try {
-//                        List<String> value = MemcachedUtils2.get("99999");
-//                        System.out.println(value);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    l.countDown();
-//                });
-//            }
-//            l.await();
-//            long t2 = System.currentTimeMillis();
-//            System.out.println(t2-t1);
-//            MemcachedUtils2.remove("99999");
-//            List<String> value = MemcachedUtils2.get("99999");
-//            System.out.println(MemcachedUtils.remove("id_generator"));
-//            MemcachedUtils.destory();
-//            exec.shutdown();
-    }
-
 }

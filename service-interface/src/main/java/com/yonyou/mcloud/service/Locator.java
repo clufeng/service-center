@@ -50,7 +50,7 @@ public class Locator {
                     lastAccessTime = System.currentTimeMillis();
                     moniterThread = new Thread(new MoniterThread());
                     moniterThread.setDaemon(true);
-                    moniterThread.start();
+//                    moniterThread.start();
                 }
             }
         }
@@ -91,7 +91,7 @@ public class Locator {
 
         try {
             Object proxyHelper = Class.forName(cls.getName() + "Helper").newInstance();
-            Method castMethod = proxyHelper.getClass().getMethod("checkedCast", Ice.ObjectPrx.class);
+            Method castMethod = proxyHelper.getClass().getMethod("uncheckedCast", Ice.ObjectPrx.class);
             proxy = (ObjectPrx) castMethod.invoke(proxyHelper, basePrx);
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,6 +144,8 @@ public class Locator {
             String id = idGeneratorPrx.nextId();
             System.out.println("id is :" + id);
         }
+
+        closeCommunicator(true);
 
     }
 }

@@ -11,4 +11,9 @@ public class IdGeneratorService extends AbstractService {
     public Object createServiceObject() {
         return new IdGeneratorImpl();
     }
+
+    @Override
+    public String getVersion() {
+        return "1.0.0";
+    }
 }

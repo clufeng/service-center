@@ -10,24 +10,17 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>service-impl</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>service-registry</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.mcloud.rpc</groupId>
-            <artifactId>service-interface</artifactId>
+            <artifactId>service-common</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.mcloud.rpc</groupId>
-            <artifactId>service-framework</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>service-impl</finalName>
+        <finalName>service-registry</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -44,5 +37,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

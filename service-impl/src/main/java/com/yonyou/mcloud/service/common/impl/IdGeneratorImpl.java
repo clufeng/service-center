@@ -1,8 +1,8 @@
 package com.yonyou.mcloud.service.common.impl;
 
 import Ice.Current;
+import com.yonyou.mcloud.memcached.MemcachedUtils;
 import com.yonyou.mcloud.service.common._IdGeneratorDisp;
-import com.yonyou.mcloud.service.util.MemcachedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
