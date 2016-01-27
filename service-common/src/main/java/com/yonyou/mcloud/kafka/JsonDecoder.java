@@ -1,4 +1,4 @@
-package com.yonyou.mcloud.service.util;
+package com.yonyou.mcloud.kafka;
 
 import com.alibaba.fastjson.JSON;
 import kafka.serializer.Decoder;

@@ -1,8 +1,6 @@
 package com.yonyou.mcloud.kafka;
 
-import com.yonyou.mcloud.service.logger.ServiceExecLog;
-import com.yonyou.mcloud.service.monitor.ServiceMonitor;
-import com.yonyou.mcloud.service.util.MsgPackDecoder;
+import com.yonyou.mcloud.ServiceExecLog;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
@@ -26,10 +24,8 @@ public class KafkaConsumer {
         Properties props = new Properties();
         //zookeeper 配置
         props.put("zookeeper.connect", "192.168.20.17:2181,192.168.20.18:2181,192.168.20.19:2181");
-
         //group 代表一个消费组
         props.put("group.id", "gourp-1");
-
         //zk连接超时
         props.put("zookeeper.session.timeout.ms", "4000");
         props.put("zookeeper.sync.time.ms", "200");
@@ -47,7 +43,7 @@ public class KafkaConsumer {
 
         Map<String, Integer> topicCountMap = new HashMap<>();
 
-        topicCountMap.put(ServiceMonitor.LOG_TOPIC, 1);
+        topicCountMap.put(ServiceExecLog.TOPIC, 1);
 
         StringDecoder keyDecoder = new StringDecoder(new VerifiableProperties());
         MsgPackDecoder<ServiceExecLog> valueDecoder = new MsgPackDecoder<>(ServiceExecLog.class);
@@ -55,7 +51,7 @@ public class KafkaConsumer {
         Map<String, List<KafkaStream<String, ServiceExecLog>>> consumerMap =
                 consumer.createMessageStreams(topicCountMap,keyDecoder, valueDecoder);
 
-        KafkaStream<String, ServiceExecLog> stream = consumerMap.get(ServiceMonitor.LOG_TOPIC).get(0);
+        KafkaStream<String, ServiceExecLog> stream = consumerMap.get(ServiceExecLog.TOPIC).get(0);
 
         for (MessageAndMetadata<String, ServiceExecLog> message : stream) {
             System.out.println(message.message());

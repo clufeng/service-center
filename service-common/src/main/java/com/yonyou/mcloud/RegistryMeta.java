@@ -1,7 +1,7 @@
 package com.yonyou.mcloud;
 
 /**
- * Created by duduchao on 16/1/26
+ * Created by hubo on 16/1/26
  */
 public class RegistryMeta {
 

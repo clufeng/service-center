@@ -3,22 +3,17 @@ package com.yonyou.mcloud.service.monitor;
 import Ice.Communicator;
 import IceGrid.*;
 import com.yonyou.mcloud.RegistryMeta;
+import com.yonyou.mcloud.ServiceExecLog;
+import com.yonyou.mcloud.kafka.KafkaProducer;
 import com.yonyou.mcloud.registry.RegistryAgent;
 import com.yonyou.mcloud.registry.impl.zk.ZookeeperRegistryAgent;
 import com.yonyou.mcloud.service.AbstractService;
-import com.yonyou.mcloud.service.logger.ServiceExecLog;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,8 +23,6 @@ import java.util.concurrent.Executors;
  */
 public class ServiceMonitor {
 
-    public static final String LOG_TOPIC = "service_log_topic_msgpack";
-
     private static final String service_zk_node_path="/mcloud/service/";
 
     private static final Logger log = LoggerFactory.getLogger("moniter");
@@ -38,37 +31,34 @@ public class ServiceMonitor {
 
     private static ExecutorService exec;
 
-    private Producer<String, ServiceExecLog> logProducer;
+    private KafkaProducer<ServiceExecLog> logProducer;
 
     private RegistryAgent agent;
 
     private String hostAddr;
-
-    private void initLogProducer() {
-        Properties props = new Properties();
-
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("logproducer");
-
-        Enumeration<String> enumeration = resourceBundle.getKeys();
-
-        while (enumeration.hasMoreElements()) {
-            String key = enumeration.nextElement();
-            props.put(key, resourceBundle.getString(key));
-        }
-
-        logProducer = new Producer<>(new ProducerConfig(props));
-    }
+    private String hostName;
 
     private ServiceMonitor() {
+
         exec = Executors.newCachedThreadPool();
         agent = new ZookeeperRegistryAgent(service_zk_node_path);
+
         try {
             hostAddr = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             log.warn("unknown host");
             hostAddr = "0.0.0.0";
         }
-        initLogProducer();
+
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            log.warn("unknown host name");
+            hostName="unknown";
+        }
+
+        logProducer = new KafkaProducer<>(ServiceExecLog.TOPIC);
+
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -116,31 +106,14 @@ public class ServiceMonitor {
         exec.execute(new Runnable() {
             @Override
             public void run() {
-                String addr;
-
-                String hostName;
-
-                try {
-                    addr = InetAddress.getLocalHost().getHostAddress();
-                } catch (UnknownHostException e) {
-                    addr = "0.0.0.0";
-                }
-
-                try {
-                    hostName = InetAddress.getLocalHost().getHostName();
-                } catch (UnknownHostException e) {
-                    hostName="unknown";
-                }
-
                 ServiceExecLog log = new ServiceExecLog();
                 log.setName(name);
                 log.setOp(op);
                 log.setExecTime(execTime);
                 log.setStartTime(startTime);
-                log.setIp(addr);
+                log.setIp(hostAddr);
                 log.setHostName(hostName);
-
-                logProducer.send(new KeyedMessage<String, ServiceExecLog>(LOG_TOPIC, log));
+                logProducer.produce(log);
             }
         });
     }

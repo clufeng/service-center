@@ -1,13 +1,11 @@
 package com.yonyou.mcloud.zookeeper.impl;
 
+import com.yonyou.mcloud.utils.PropertiesUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * Created by hubo on 16/1/14
@@ -23,15 +21,7 @@ public class CuratorZookeeperClientFactory {
     private static final Map<String, String> config;
 
     static {
-        config = new HashMap<>();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("zk");
-
-        Enumeration<String> enumeration = resourceBundle.getKeys();
-
-        while (enumeration.hasMoreElements()) {
-           String key = enumeration.nextElement();
-            config.put(key, resourceBundle.getString(key));
-        }
+        config = PropertiesUtil.createMapByProperties("zk");
     }
 
     public static CuratorFramework create() {

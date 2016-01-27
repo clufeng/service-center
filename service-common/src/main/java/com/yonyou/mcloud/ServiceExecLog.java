@@ -1,4 +1,4 @@
-package com.yonyou.mcloud.service.logger;
+package com.yonyou.mcloud;
 
 import org.msgpack.annotation.Message;
 
@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 @Message
 public class ServiceExecLog implements Serializable {
+
+    public static final String TOPIC = "service_log_topic_msgpack";
 
     private String ip;
 

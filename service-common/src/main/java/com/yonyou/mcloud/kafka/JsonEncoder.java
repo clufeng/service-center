@@ -1,11 +1,11 @@
-package com.yonyou.mcloud.service.util;
+package com.yonyou.mcloud.kafka;
 
 import com.alibaba.fastjson.JSON;
 import kafka.serializer.Encoder;
 import kafka.utils.VerifiableProperties;
 
 /**
- * Created by duduchao on 16/1/18
+ * Created by hubo on 16/1/18
  */
 public class JsonEncoder<T> implements Encoder<T> {
     @Override
