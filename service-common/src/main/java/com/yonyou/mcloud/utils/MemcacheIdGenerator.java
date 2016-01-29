@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 
@@ -18,15 +16,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class MemcacheIdGenerator implements DistributedIdGenerator {
 
-    public static final String DEFAULT_SYS_MODULE_CODE = "0001";
+    public String defaultSysModuleCode;
 
     private static final Logger log = LoggerFactory.getLogger(MemcacheIdGenerator.class);
 
-    private static final String key_pre = "id_generator_";
+    private String keyPre = "id_generator_";
 
-    private static final int moniter_sleep_time = 60 * 60; //1个小时
+    private int moniterSleepTime; //1个小时
 
-    private static final String modules_key = "MODULEKEYS";
+    private static String modules_key = "MODULEKEYS";
 
     private Set<String> moduleCache = new CopyOnWriteArraySet<>();
 
@@ -42,9 +40,19 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
 
     public MemcacheIdGenerator() {
         lastTime = getCurrDateStr();
-        Thread monitorThread = new Thread(new MonitorWorker());
-        monitorThread.setDaemon(true);
-        monitorThread.start();
+        Properties config = PropertiesUtil.createProperties("idgenerator");
+
+        modules_key = (String) config.get("moduleKey");
+        defaultSysModuleCode = (String) config.get("defaultSysModuleCode");
+
+        boolean clearTheardEnable = (Boolean) config.get("clearTheardEnable");
+        if(clearTheardEnable) {
+            moniterSleepTime = (Integer) config.get("moniterSleepTime");
+            Thread monitorThread = new Thread(new MonitorWorker());
+            monitorThread.setDaemon(true);
+            monitorThread.start();
+        }
+
         updateModuleCache();
     }
 
@@ -87,7 +95,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
 
         String curr = formatter.format(new Date());
 
-        String key = key_pre + getCurrDateStr() + "_" + module;
+        String key = keyPre + getCurrDateStr() + "_" + module;
 
         //为了效率考虑,每天同类数据只能生产1百万条主键ID,应该可以满足95%以上的场景,所以不用加锁
         String id = module + curr  + String.format("%06d", MemcachedUtils.incr(key, 1, 0));
@@ -100,7 +108,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
 
     @Override
     public String nextId() {
-        return nextId(DEFAULT_SYS_MODULE_CODE);
+        return nextId(defaultSysModuleCode);
     }
 
     public String getCurrDateStr() {
@@ -119,7 +127,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
                     Set<String> moduleSet = MemcachedUtils.get(modules_key);
                     //删除各个模块的计数器
                     for (String module : moduleSet) {
-                        String oldKey = key_pre + lastTime + "_" + module;
+                        String oldKey = keyPre + lastTime + "_" + module;
                         MemcachedUtils.remove(oldKey);
                     }
 
@@ -127,7 +135,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
                 }
 
                 try {
-                    TimeUnit.SECONDS.sleep(moniter_sleep_time);
+                    TimeUnit.SECONDS.sleep(moniterSleepTime);
                 } catch (InterruptedException e) {
                     log.error(e.getMessage(), e);
                     Thread.currentThread().interrupt();
