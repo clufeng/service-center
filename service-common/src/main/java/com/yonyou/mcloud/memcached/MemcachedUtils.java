@@ -1,5 +1,6 @@
 package com.yonyou.mcloud.memcached;
 
+import net.rubyeye.xmemcached.CASOperation;
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.MemcachedClientBuilder;
 import net.rubyeye.xmemcached.XMemcachedClientBuilder;
@@ -52,6 +53,15 @@ public class MemcachedUtils {
         }
     }
 
+    public static boolean set(String key, Object value, int expire) {
+        try {
+            return memcachedClient.set(key, expire, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * 根据键获取Memcached内存缓存管理系统中相应的值
      */
@@ -96,5 +106,14 @@ public class MemcachedUtils {
         }
 
         return 0;
+    }
+
+    public static <T> boolean cas(String key, CASOperation<T> operation) {
+        try {
+            return memcachedClient.cas(key, operation);
+        } catch (TimeoutException | InterruptedException | MemcachedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
