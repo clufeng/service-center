@@ -2,7 +2,7 @@
 <configuration status="OFF">
 
     <properties>
-        <property name="basePath">${sys:catalina.home}/logs/service-impl</property>
+        <property name="basePath">${loghome}/logs/server-iml${appNo}.log</property>
     </properties>
 
     <appenders>

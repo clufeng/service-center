@@ -14,7 +14,7 @@ import org.apache.zookeeper.WatchedEvent;
 import java.util.List;
 
 /**
- * Created by duduchao on 16/1/26
+ * Created by hubo on 16/1/26
  */
 public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorWatcher> {
 
