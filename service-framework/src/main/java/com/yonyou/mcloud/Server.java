@@ -20,6 +20,7 @@ public class Server {
         Util.setProcessLogger(new SystemLogger(SYS_LOG_NAME));
 
         IceBox.Server s = new IceBox.Server();
+
         int status = s.main("service-center", args, initData);
 
         System.exit(status);

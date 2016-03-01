@@ -45,9 +45,16 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
         modules_key = (String) config.get("moduleKey");
         defaultSysModuleCode = (String) config.get("defaultSysModuleCode");
 
-        boolean clearTheardEnable = (Boolean) config.get("clearTheardEnable");
+        boolean clearTheardEnable = true;
+
+        if(config.get("clearTheardEnable") != null) {
+            clearTheardEnable = Boolean.valueOf(config.get("clearTheardEnable").toString());
+        }
+
         if(clearTheardEnable) {
-            moniterSleepTime = (Integer) config.get("moniterSleepTime");
+            if(config.get("moniterSleepTime") != null) {
+                moniterSleepTime =  Integer.valueOf(config.get("moniterSleepTime").toString());
+            }
             Thread monitorThread = new Thread(new MonitorWorker());
             monitorThread.setDaemon(true);
             monitorThread.start();
@@ -98,7 +105,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
         String key = keyPre + getCurrDateStr() + "_" + module;
 
         //为了效率考虑,每天同类数据只能生产1百万条主键ID,应该可以满足95%以上的场景,所以不用加锁
-        String id = module + curr  + String.format("%06d", MemcachedUtils.incr(key, 1, 0));
+        String id = module + curr  + String.format("%06d", MemcachedUtils.incr(key, 1, 1));
 
         log.debug("id generate : {}", id);
 

@@ -53,8 +53,9 @@ public abstract class AbstractService implements Service {
         beginStart(s, c, args);
         _start(s, c, args);
         afterStart(s, c, args);
-
-        monitor.registerService(this);
+        if(isMonitor()) {
+            monitor.registerService(this);
+        }
     }
 
     @Override
@@ -63,8 +64,10 @@ public abstract class AbstractService implements Service {
         beginStop();
         _stop();
         afterStop();
-        ServiceDispatchInterceptor.removeService(id);
-        monitor.unregisterService(this);
+        if(isMonitor()) {
+            ServiceDispatchInterceptor.removeService(id);
+            monitor.unregisterService(this);
+        }
     }
 
     protected void beginStart(String s, Communicator c, String[] args) {}
