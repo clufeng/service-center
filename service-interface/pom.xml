@@ -14,7 +14,10 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.mcloud.rpc</groupId>
+            <artifactId>service-framework-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

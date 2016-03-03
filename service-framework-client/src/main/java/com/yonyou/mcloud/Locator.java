@@ -1,8 +1,9 @@
-package com.yonyou.mcloud.service;
+package com.yonyou.mcloud;
 
 import Ice.Communicator;
 import Ice.ObjectPrx;
-import com.yonyou.mcloud.service.common.IdGeneratorPrx;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Locator {
 
+    private static Logger logger = LoggerFactory.getLogger(Locator.class);
+
     public static final String REGITRY_LOCATOR_KEY = "--Ice.Default.Locator";
 
     public static final String IDLE_TIMEOUT_SECONDS_KEY = "idleTimeOutSeconds";
@@ -24,11 +27,23 @@ public class Locator {
     private static final long idleTimeOutSeconds;
 
     static {
-        ResourceBundle bundle = ResourceBundle.getBundle("locator");
 
-        regitry_locator = REGITRY_LOCATOR_KEY + "=" + bundle.getString(REGITRY_LOCATOR_KEY);
+        String _regitry_locator;
+        long _idleTimeOutSeconds;
 
-        idleTimeOutSeconds = Long.valueOf(bundle.getString(IDLE_TIMEOUT_SECONDS_KEY));
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("locator");
+            _regitry_locator = REGITRY_LOCATOR_KEY + "=" + bundle.getString(REGITRY_LOCATOR_KEY);
+            _idleTimeOutSeconds = Long.valueOf(bundle.getString(IDLE_TIMEOUT_SECONDS_KEY));
+        }catch (Exception e) {
+            logger.warn("找不到默认locator配置文件");
+            _regitry_locator = "";
+            _idleTimeOutSeconds = 10 * 600;
+        }
+
+        regitry_locator = _regitry_locator;
+
+        idleTimeOutSeconds = _idleTimeOutSeconds;
     }
 
     private static Communicator ic;
@@ -50,7 +65,7 @@ public class Locator {
                     lastAccessTime = System.currentTimeMillis();
                     moniterThread = new Thread(new MoniterThread());
                     moniterThread.setDaemon(true);
-//                    moniterThread.start();
+                    moniterThread.start();
                 }
             }
         }
@@ -85,13 +100,13 @@ public class Locator {
 
         String idToProxy = nameBase + "Service@" + nameBase + "ServiceAdapter";
 
-        Ice.ObjectPrx basePrx = ic.stringToProxy(idToProxy);
+        ObjectPrx basePrx = ic.stringToProxy(idToProxy);
 
         ObjectPrx proxy = null;
 
         try {
             Object proxyHelper = Class.forName(cls.getName() + "Helper").newInstance();
-            Method castMethod = proxyHelper.getClass().getMethod("uncheckedCast", Ice.ObjectPrx.class);
+            Method castMethod = proxyHelper.getClass().getMethod("uncheckedCast", ObjectPrx.class);
             proxy = (ObjectPrx) castMethod.invoke(proxyHelper, basePrx);
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,16 +151,5 @@ public class Locator {
     }
 
 
-    public static void main(String[] args) {
 
-        IdGeneratorPrx idGeneratorPrx = Locator.lookup(IdGeneratorPrx.class);
-
-        for (int i = 0; i < 1; i++) {
-            String id = idGeneratorPrx.nextId();
-            System.out.println("id is :" + id);
-        }
-
-        closeCommunicator(true);
-
-    }
 }

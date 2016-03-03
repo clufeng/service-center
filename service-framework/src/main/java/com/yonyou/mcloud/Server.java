@@ -18,11 +18,8 @@ public class Server {
         initData.properties.setProperty("Ice.Admin.DelayCreation", "1");
         initData.logger = new SystemLogger(SYS_LOG_NAME);
         Util.setProcessLogger(new SystemLogger(SYS_LOG_NAME));
-
         IceBox.Server s = new IceBox.Server();
-
         int status = s.main("service-center", args, initData);
-
         System.exit(status);
     }
 
