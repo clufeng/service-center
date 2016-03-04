@@ -29,6 +29,7 @@ public class Locator {
     static {
 
         String _regitry_locator;
+
         long _idleTimeOutSeconds;
 
         try {
