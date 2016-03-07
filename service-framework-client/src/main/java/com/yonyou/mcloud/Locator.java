@@ -20,11 +20,15 @@ public class Locator {
 
     public static final String REGITRY_LOCATOR_KEY = "--Ice.Default.Locator";
 
+    public static final String ICE_CONFIG_KEY = "--Ice.Config";
+
     public static final String IDLE_TIMEOUT_SECONDS_KEY = "idleTimeOutSeconds";
 
     private static final String regitry_locator;
 
     private static final long idleTimeOutSeconds;
+
+    private static final String ice_config;
 
     static {
 
@@ -32,19 +36,25 @@ public class Locator {
 
         long _idleTimeOutSeconds;
 
+        String _ice_config;
+
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("locator");
             _regitry_locator = REGITRY_LOCATOR_KEY + "=" + bundle.getString(REGITRY_LOCATOR_KEY);
             _idleTimeOutSeconds = Long.valueOf(bundle.getString(IDLE_TIMEOUT_SECONDS_KEY));
+            _ice_config = ICE_CONFIG_KEY + "=" + bundle.getString(ICE_CONFIG_KEY);
         }catch (Exception e) {
             logger.warn("找不到默认locator配置文件");
             _regitry_locator = "";
             _idleTimeOutSeconds = 10 * 600;
+            _ice_config = "";
         }
 
         regitry_locator = _regitry_locator;
 
         idleTimeOutSeconds = _idleTimeOutSeconds;
+
+        ice_config = _ice_config;
     }
 
     private static Communicator ic;
@@ -62,7 +72,7 @@ public class Locator {
         if(ic == null) {
             synchronized (Locator.class) {
                 if (ic == null) {
-                    ic = Ice.Util.initialize(new String[]{regitry_locator});
+                    ic = Ice.Util.initialize(new String[]{regitry_locator, ice_config});
                     lastAccessTime = System.currentTimeMillis();
                     moniterThread = new Thread(new MoniterThread());
                     moniterThread.setDaemon(true);
