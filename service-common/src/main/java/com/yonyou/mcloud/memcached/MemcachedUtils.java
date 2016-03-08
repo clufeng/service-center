@@ -28,7 +28,7 @@ public class MemcachedUtils {
 
     static {
         // 获取memcached服务器列表
-        String servers = "192.168.21.2:11211 192.168.21.3:11211";
+        String servers = "10.10.5.21:11211 10.10.5.22:11211";
 
         MemcachedClientBuilder builder = new XMemcachedClientBuilder(AddrUtil.getAddresses(servers));
         // 使用二进制协议

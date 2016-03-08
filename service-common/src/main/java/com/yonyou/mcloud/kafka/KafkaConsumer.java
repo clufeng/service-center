@@ -23,7 +23,7 @@ public class KafkaConsumer {
     private KafkaConsumer() {
         Properties props = new Properties();
         //zookeeper 配置
-        props.put("zookeeper.connect", "192.168.20.17:2181,192.168.20.18:2181,192.168.20.19:2181");
+        props.put("zookeeper.connect", "mq1:2181,mq2:2181,mq3:2181");
         //group 代表一个消费组
         props.put("group.id", "gourp-1");
         //zk连接超时
