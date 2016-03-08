@@ -18,9 +18,13 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
-public interface _IdGeneratorOperationsNC
+public abstract class Callback_IdGenerator_nextId
+    extends IceInternal.TwowayCallback implements Ice.TwowayCallbackArg1<String>
 {
-    String nextId();
+    public final void __completed(Ice.AsyncResult __result)
+    {
+        IdGeneratorPrxHelper.__nextId_completed(this, __result);
+    }
 }

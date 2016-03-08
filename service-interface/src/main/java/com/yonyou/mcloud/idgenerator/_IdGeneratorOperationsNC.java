@@ -18,9 +18,9 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
-public interface _IdGeneratorOperations
+public interface _IdGeneratorOperationsNC
 {
-    String nextId(Ice.Current __current);
+    String nextId();
 }

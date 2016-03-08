@@ -18,20 +18,9 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
-public final class IdGeneratorPrxHolder
+public interface _IdGeneratorOperations
 {
-    public
-    IdGeneratorPrxHolder()
-    {
-    }
-
-    public
-    IdGeneratorPrxHolder(IdGeneratorPrx value)
-    {
-        this.value = value;
-    }
-
-    public IdGeneratorPrx value;
+    String nextId(Ice.Current __current);
 }

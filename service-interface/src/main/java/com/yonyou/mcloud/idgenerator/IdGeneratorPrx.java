@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
 public interface IdGeneratorPrx extends Ice.ObjectPrx
 {

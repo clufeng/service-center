@@ -18,12 +18,20 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
-public interface IdGenerator extends Ice.Object,
-                                     _IdGeneratorOperations, _IdGeneratorOperationsNC
+public final class IdGeneratorPrxHolder
 {
-    public static final String ice_staticId = "::common::IdGenerator";
+    public
+    IdGeneratorPrxHolder()
+    {
+    }
 
-    public static final long serialVersionUID = 1423065934L;
+    public
+    IdGeneratorPrxHolder(IdGeneratorPrx value)
+    {
+        this.value = value;
+    }
+
+    public IdGeneratorPrx value;
 }

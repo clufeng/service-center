@@ -1,4 +1,4 @@
-package com.yonyou.mcloud.service.common.impl;
+package com.yonyou.mcloud.idgenerator.impl;
 
 import Ice.Object;
 import com.yonyou.mcloud.service.AbstractService;

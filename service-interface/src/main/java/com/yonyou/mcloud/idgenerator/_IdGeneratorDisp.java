@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package com.yonyou.mcloud.service.common;
+package com.yonyou.mcloud.idgenerator;
 
 public abstract class _IdGeneratorDisp extends Ice.ObjectImpl implements IdGenerator
 {
