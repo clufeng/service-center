@@ -22,6 +22,7 @@
         <module>service-registry</module>
         <module>service-common</module>
         <module>service-framework-client</module>
+        <module>service-monitor</module>
     </modules>
 
     <dependencies>

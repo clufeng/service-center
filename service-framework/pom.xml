@@ -27,18 +27,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.zeroc</groupId>
-            <artifactId>icegrid</artifactId>
-            <version>${com.zeroc.ice.versioin}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zeroc</groupId>
-            <artifactId>glacier2</artifactId>
-            <version>${com.zeroc.ice.versioin}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.2.5.RELEASE</version>

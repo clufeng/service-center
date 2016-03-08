@@ -1,7 +1,5 @@
 package com.yonyou.mcloud.service.monitor;
 
-import Ice.Communicator;
-import IceGrid.*;
 import com.yonyou.mcloud.RegistryMeta;
 import com.yonyou.mcloud.ServiceExecLog;
 import com.yonyou.mcloud.kafka.KafkaProducer;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -117,27 +114,5 @@ public class ServiceMonitor {
             }
         });
     }
-
-
-    public static void main(String[] args) throws PermissionDeniedException {
-        Communicator ic = Ice.Util.initialize(new String[]{"--Ice.Default.Locator=IceGrid/Locator:tcp -h 192.168.20.17 -p 4061:tcp -h 192.168.20.18 -p 4061"});
-
-        RegistryPrx r = RegistryPrxHelper.checkedCast(ic.stringToProxy("IceGrid/Registry"));
-
-        AdminSessionPrx sessionPrx = r.createAdminSession("test","test");
-
-        AdminPrx admin = sessionPrx.getAdmin();
-
-        System.out.println(admin.getObjectInfosByType(null).length);
-
-        System.out.println(Arrays.toString(admin.getAllAdapterIds()));
-
-        sessionPrx.destroy();
-
-        ic.shutdown();
-        ic.destroy();
-    }
-
-
 
 }
