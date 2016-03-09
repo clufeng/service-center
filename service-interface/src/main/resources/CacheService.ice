@@ -9,7 +9,7 @@ module cache {
     	string msg;
     };
 
-	interface ICacheService {
+	interface CacheService {
 
 		SerializableJavaObj get(string key) throws CacheException;
 
