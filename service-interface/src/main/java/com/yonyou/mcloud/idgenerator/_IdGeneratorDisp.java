@@ -75,6 +75,25 @@ public abstract class _IdGeneratorDisp extends Ice.ObjectImpl implements IdGener
         return nextId(null);
     }
 
+    public final String nextIdByModule(String moduleCode)
+    {
+        return nextIdByModule(moduleCode, null);
+    }
+
+    public static Ice.DispatchStatus ___nextIdByModule(IdGenerator __obj, IceInternal.Incoming __inS, Ice.Current __current)
+    {
+        __checkMode(Ice.OperationMode.Normal, __current.mode);
+        IceInternal.BasicStream __is = __inS.startReadParams();
+        String moduleCode;
+        moduleCode = __is.readString();
+        __inS.endReadParams();
+        String __ret = __obj.nextIdByModule(moduleCode, __current);
+        IceInternal.BasicStream __os = __inS.__startWriteParams(Ice.FormatType.DefaultFormat);
+        __os.writeString(__ret);
+        __inS.__endWriteParams(true);
+        return Ice.DispatchStatus.DispatchOK;
+    }
+
     public static Ice.DispatchStatus ___nextId(IdGenerator __obj, IceInternal.Incoming __inS, Ice.Current __current)
     {
         __checkMode(Ice.OperationMode.Normal, __current.mode);
@@ -92,7 +111,8 @@ public abstract class _IdGeneratorDisp extends Ice.ObjectImpl implements IdGener
         "ice_ids",
         "ice_isA",
         "ice_ping",
-        "nextId"
+        "nextId",
+        "nextIdByModule"
     };
 
     public Ice.DispatchStatus __dispatch(IceInternal.Incoming in, Ice.Current __current)
@@ -124,6 +144,10 @@ public abstract class _IdGeneratorDisp extends Ice.ObjectImpl implements IdGener
             case 4:
             {
                 return ___nextId(this, in, __current);
+            }
+            case 5:
+            {
+                return ___nextIdByModule(this, in, __current);
             }
         }
 

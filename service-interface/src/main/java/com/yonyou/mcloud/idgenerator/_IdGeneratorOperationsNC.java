@@ -22,5 +22,7 @@ package com.yonyou.mcloud.idgenerator;
 
 public interface _IdGeneratorOperationsNC
 {
+    String nextIdByModule(String moduleCode);
+
     String nextId();
 }

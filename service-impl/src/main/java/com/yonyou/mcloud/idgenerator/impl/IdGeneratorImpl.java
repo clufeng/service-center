@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IdGeneratorImpl extends _IdGeneratorDisp {
 
-    private static final Logger log = LoggerFactory.getLogger(IdGeneratorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdGeneratorImpl.class);
 
     private DistributedIdGenerator idGenerator;
 
@@ -22,7 +22,14 @@ public class IdGeneratorImpl extends _IdGeneratorDisp {
     }
 
     @Override
+    public String nextIdByModule(String moduleCode, Current __current) {
+        logger.info("nextIdByModule : module[{}]", moduleCode);
+        return idGenerator.nextId(moduleCode);
+    }
+
+    @Override
     public String nextId(Current __current) {
+        logger.info("nextId");
         return idGenerator.nextId();
     }
 

@@ -40,6 +40,7 @@ public abstract class AbstractService implements Service {
     }
 
     private void _stop() {
+        adapter.deactivate();
         adapter.destroy();
     }
 
@@ -60,7 +61,6 @@ public abstract class AbstractService implements Service {
 
     @Override
     public void stop() {
-
         beginStop();
         _stop();
         afterStop();

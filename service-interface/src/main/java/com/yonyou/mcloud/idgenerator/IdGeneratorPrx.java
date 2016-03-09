@@ -22,6 +22,44 @@ package com.yonyou.mcloud.idgenerator;
 
 public interface IdGeneratorPrx extends Ice.ObjectPrx
 {
+    public String nextIdByModule(String moduleCode);
+
+    public String nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, Ice.Callback __cb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx, Ice.Callback __cb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, Callback_IdGenerator_nextIdByModule __cb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx, Callback_IdGenerator_nextIdByModule __cb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode,
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb,
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode,
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb,
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb,
+                                                IceInternal.Functional_BoolCallback __sentCb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode,
+                                                java.util.Map<String, String> __ctx,
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb,
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb);
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode,
+                                                java.util.Map<String, String> __ctx,
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb,
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb,
+                                                IceInternal.Functional_BoolCallback __sentCb);
+
+    public String end_nextIdByModule(Ice.AsyncResult __result);
+
     public String nextId();
 
     public String nextId(java.util.Map<String, String> __ctx);

@@ -15,7 +15,7 @@ public class Monitor {
 
         RegistryPrx r = RegistryPrxHelper.checkedCast(ic.stringToProxy("IceGrid/Registry"));
 
-        AdminSessionPrx sessionPrx = r.createAdminSession("test","test");
+        AdminSessionPrx sessionPrx = r.createAdminSession("test", "test");
 
         Ice.ObjectAdapter _adapter = ic.createObjectAdapter(r.ice_getAdapterId());
 
@@ -36,24 +36,24 @@ public class Monitor {
         _nodeObserverIdentity.name = "node-" + java.util.UUID.randomUUID().toString();
         _nodeObserverIdentity.category = category;
 
-                        _adapter.add(
-                                new ApplicationObserverI() {
-                                }, _applicationObserverIdentity);
+        _adapter.add(
+                new ApplicationObserverI() {
+                }, _applicationObserverIdentity);
 
 
-                        _adapter.add(
-                                new AdapterObserverI(), _adapterObserverIdentity);
+        _adapter.add(
+                new AdapterObserverI(), _adapterObserverIdentity);
 
 
-                        _adapter.add(
-                                new ObjectObserverI(), _objectObserverIdentity);
+        _adapter.add(
+                new ObjectObserverI(), _objectObserverIdentity);
 
-                        _adapter.add(
-                                new RegistryObserverI(), _registryObserverIdentity);
+        _adapter.add(
+                new RegistryObserverI(), _registryObserverIdentity);
 
 
-                        _adapter.add(
-                                new NodeObserverI(), _nodeObserverIdentity);
+        _adapter.add(
+                new NodeObserverI(), _nodeObserverIdentity);
 
         sessionPrx.setObserversByIdentity(
                 _registryObserverIdentity,

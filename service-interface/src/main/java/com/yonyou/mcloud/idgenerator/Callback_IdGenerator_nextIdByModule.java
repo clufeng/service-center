@@ -20,9 +20,11 @@
 
 package com.yonyou.mcloud.idgenerator;
 
-public interface _IdGeneratorOperations
+public abstract class Callback_IdGenerator_nextIdByModule
+    extends IceInternal.TwowayCallback implements Ice.TwowayCallbackArg1<String>
 {
-    String nextIdByModule(String moduleCode, Ice.Current __current);
-
-    String nextId(Ice.Current __current);
+    public final void __completed(Ice.AsyncResult __result)
+    {
+        IdGeneratorPrxHelper.__nextIdByModule_completed(this, __result);
+    }
 }

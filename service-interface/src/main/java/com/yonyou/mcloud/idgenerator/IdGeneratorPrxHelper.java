@@ -168,11 +168,184 @@ public final class IdGeneratorPrxHelper extends Ice.ObjectPrxHelperBase implemen
 
     static public void __nextId_completed(Ice.TwowayCallbackArg1<String> __cb, Ice.AsyncResult __result)
     {
-        IdGeneratorPrx __proxy = (IdGeneratorPrx)__result.getProxy();
+        com.yonyou.mcloud.idgenerator.IdGeneratorPrx __proxy = (com.yonyou.mcloud.idgenerator.IdGeneratorPrx)__result.getProxy();
         String __ret = null;
         try
         {
             __ret = __proxy.end_nextId(__result);
+        }
+        catch(Ice.LocalException __ex)
+        {
+            __cb.exception(__ex);
+            return;
+        }
+        catch(Ice.SystemException __ex)
+        {
+            __cb.exception(__ex);
+            return;
+        }
+        __cb.response(__ret);
+    }
+
+    private static final String __nextIdByModule_name = "nextIdByModule";
+
+    public String nextIdByModule(String moduleCode)
+    {
+        return nextIdByModule(moduleCode, null, false);
+    }
+
+    public String nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx)
+    {
+        return nextIdByModule(moduleCode, __ctx, true);
+    }
+
+    private String nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx, boolean __explicitCtx)
+    {
+        __checkTwowayOnly(__nextIdByModule_name);
+        return end_nextIdByModule(begin_nextIdByModule(moduleCode, __ctx, __explicitCtx, true, null));
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode)
+    {
+        return begin_nextIdByModule(moduleCode, null, false, false, null);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, true, false, null);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, Ice.Callback __cb)
+    {
+        return begin_nextIdByModule(moduleCode, null, false, false, __cb);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx, Ice.Callback __cb)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, true, false, __cb);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, Callback_IdGenerator_nextIdByModule __cb)
+    {
+        return begin_nextIdByModule(moduleCode, null, false, false, __cb);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, java.util.Map<String, String> __ctx, Callback_IdGenerator_nextIdByModule __cb)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, true, false, __cb);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb, 
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb)
+    {
+        return begin_nextIdByModule(moduleCode, null, false, false, __responseCb, __exceptionCb, null);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb, 
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb, 
+                                                IceInternal.Functional_BoolCallback __sentCb)
+    {
+        return begin_nextIdByModule(moduleCode, null, false, false, __responseCb, __exceptionCb, __sentCb);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                java.util.Map<String, String> __ctx, 
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb, 
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, true, false, __responseCb, __exceptionCb, null);
+    }
+
+    public Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                java.util.Map<String, String> __ctx, 
+                                                IceInternal.Functional_GenericCallback1<String> __responseCb, 
+                                                IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb, 
+                                                IceInternal.Functional_BoolCallback __sentCb)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, true, false, __responseCb, __exceptionCb, __sentCb);
+    }
+
+    private Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                 java.util.Map<String, String> __ctx, 
+                                                 boolean __explicitCtx, 
+                                                 boolean __synchronous, 
+                                                 IceInternal.Functional_GenericCallback1<String> __responseCb, 
+                                                 IceInternal.Functional_GenericCallback1<Ice.Exception> __exceptionCb, 
+                                                 IceInternal.Functional_BoolCallback __sentCb)
+    {
+        return begin_nextIdByModule(moduleCode, __ctx, __explicitCtx, __synchronous, 
+                                    new IceInternal.Functional_TwowayCallbackArg1<String>(__responseCb, __exceptionCb, __sentCb)
+                                        {
+                                            public final void __completed(Ice.AsyncResult __result)
+                                            {
+                                                IdGeneratorPrxHelper.__nextIdByModule_completed(this, __result);
+                                            }
+                                        });
+    }
+
+    private Ice.AsyncResult begin_nextIdByModule(String moduleCode, 
+                                                 java.util.Map<String, String> __ctx, 
+                                                 boolean __explicitCtx, 
+                                                 boolean __synchronous, 
+                                                 IceInternal.CallbackBase __cb)
+    {
+        __checkAsyncTwowayOnly(__nextIdByModule_name);
+        IceInternal.OutgoingAsync __result = getOutgoingAsync(__nextIdByModule_name, __cb);
+        try
+        {
+            __result.prepare(__nextIdByModule_name, Ice.OperationMode.Normal, __ctx, __explicitCtx, __synchronous);
+            IceInternal.BasicStream __os = __result.startWriteParams(Ice.FormatType.DefaultFormat);
+            __os.writeString(moduleCode);
+            __result.endWriteParams();
+            __result.invoke();
+        }
+        catch(Ice.Exception __ex)
+        {
+            __result.abort(__ex);
+        }
+        return __result;
+    }
+
+    public String end_nextIdByModule(Ice.AsyncResult __iresult)
+    {
+        IceInternal.OutgoingAsync __result = IceInternal.OutgoingAsync.check(__iresult, this, __nextIdByModule_name);
+        try
+        {
+            if(!__result.__wait())
+            {
+                try
+                {
+                    __result.throwUserException();
+                }
+                catch(Ice.UserException __ex)
+                {
+                    throw new Ice.UnknownUserException(__ex.ice_name(), __ex);
+                }
+            }
+            IceInternal.BasicStream __is = __result.startReadParams();
+            String __ret;
+            __ret = __is.readString();
+            __result.endReadParams();
+            return __ret;
+        }
+        finally
+        {
+            if(__result != null)
+            {
+                __result.cacheMessageBuffers();
+            }
+        }
+    }
+
+    static public void __nextIdByModule_completed(Ice.TwowayCallbackArg1<String> __cb, Ice.AsyncResult __result)
+    {
+        com.yonyou.mcloud.idgenerator.IdGeneratorPrx __proxy = (com.yonyou.mcloud.idgenerator.IdGeneratorPrx)__result.getProxy();
+        String __ret = null;
+        try
+        {
+            __ret = __proxy.end_nextIdByModule(__result);
         }
         catch(Ice.LocalException __ex)
         {
