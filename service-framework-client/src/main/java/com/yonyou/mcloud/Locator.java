@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <p>服务资源定位器</p>
+ * <p>由定位器创建服务代理</p>
+ *
  * Created by hubo on 16/1/14
  */
 public class Locator {
@@ -68,6 +71,10 @@ public class Locator {
 
     private Locator() {}
 
+    /**
+     * 获取通信器
+     * @return Communicator
+     */
     private static Communicator getCommunicator() {
 
         if(ic == null) {
@@ -89,7 +96,11 @@ public class Locator {
         return ic;
     }
 
-    private static void closeCommunicator(boolean removeCache) {
+    /**
+     * 关闭通信器
+     * @param clearCache 是否清除缓存
+     */
+    private static void closeCommunicator(boolean clearCache) {
         synchronized (Locator.class) {
             if(ic != null){
                 try{
@@ -102,19 +113,45 @@ public class Locator {
             if(moniterThread != null) {
                 moniterThread.interrupt();
             }
-            if(removeCache) {
+            if(clearCache) {
                 cache.clear();
             }
         }
     }
 
+    /**
+     * 创建代理对象
+     *
+     * <P>
+     *     通过约定来创建代理对象，ice在生成代理对象的时候会加上Prx（Proxy简写）
+     *     但是在注册的时候通常是不加Prx。
+     * </P>
+     *
+     * 例如:
+     * <p>
+     *     IdGeneratorPrx(代理对象) -> IdGenerator（服务注册对象）
+     * </p>
+     * <p>
+     *     CacheServicePrx(代理对象) -> CacheService（服务注册对象）
+     * </p>
+     *
+     * @param ic Communicator
+     * @param cls 代理对象类
+     * @return 代理对象
+     */
     private static ObjectPrx createObjectProxy(Communicator ic, Class<? extends ObjectPrx> cls) {
 
         String name = cls.getSimpleName();
 
-        String nameBase = name.substring(0, name.indexOf("Prx"));
+        //server box 用的idToPrxoy
+//        String nameBase = name.substring(0, name.indexOf("Prx"));
+//        String idToProxy = nameBase + "Service@" + nameBase + "ServiceAdapter";
 
-        String idToProxy = nameBase + "Service@" + nameBase + "ServiceAdapter";
+        String idToProxy = name.substring(0, name.indexOf("Prx"));
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("idToProxy : {}", idToProxy);
+        }
 
         ObjectPrx basePrx = ic.stringToProxy(idToProxy);
 
@@ -125,12 +162,18 @@ public class Locator {
             Method castMethod = proxyHelper.getClass().getMethod("uncheckedCast", ObjectPrx.class);
             proxy = (ObjectPrx) castMethod.invoke(proxyHelper, basePrx);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return proxy;
     }
 
+    /**
+     * 查找代理对象
+     * @param cls
+     * @param <T>
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T extends ObjectPrx> T lookup(Class<T> cls) {
 
@@ -160,6 +203,9 @@ public class Locator {
                 }
 
                 if(lastAccessTime + idleTimeOutSeconds * 1000L < System.currentTimeMillis()) {
+                    if(logger.isDebugEnabled()) {
+                        logger.debug("close Communicator and clear Cache ...");
+                    }
                     closeCommunicator(true);
                 }
             }

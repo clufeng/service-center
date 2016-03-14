@@ -1,7 +1,7 @@
 package com.yonyou.mcloud.zookeeper;
 
 /**
- * Created by duduchao on 16/1/26
+ * Created by hubo on 16/1/26
  */
 public interface StateListener {
 

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by duduchao on 16/1/27
+ * Created by hubo on 16/1/27
  */
 public class KafkaProducer<T> {
 

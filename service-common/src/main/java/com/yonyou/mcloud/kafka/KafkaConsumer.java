@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * Kafka 消费者用于测试
  * Created by hubo on 16/1/15
  */
 public class KafkaConsumer {

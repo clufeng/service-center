@@ -5,11 +5,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
+ * <p>
+ *     Spring 工具类，<br/>
+ *     主要获取实体bean
+ * </p>
+ *
  * Created by hubo on 2016/1/7
  */
 public class SpringUtil {
 
     private volatile static ApplicationContext context;
+
 
     public static Object getBean(String name) {
         return getContext().getBean(name);

@@ -4,7 +4,10 @@ import Ice.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by duduchao on 16/1/29
+ * <p>
+ *     ice 默认系统日志
+ * </p>
+ * Created by hubo on 16/1/29
  */
 public class SystemLogger implements Logger {
 

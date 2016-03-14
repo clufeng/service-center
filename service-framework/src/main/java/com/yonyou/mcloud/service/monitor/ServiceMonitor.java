@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
  */
 public class ServiceMonitor {
 
-    private static final String service_zk_node_path="/mcloud/service/";
+    private static final String SERVICE_ZK_NODE_PATH="/mcloud/service/";
 
     private static final Logger log = LoggerFactory.getLogger("moniter");
 
@@ -38,7 +38,7 @@ public class ServiceMonitor {
     private ServiceMonitor() {
 
         exec = Executors.newCachedThreadPool();
-        agent = new ZookeeperRegistryAgent(service_zk_node_path);
+        agent = new ZookeeperRegistryAgent(SERVICE_ZK_NODE_PATH);
 
         try {
             hostAddr = InetAddress.getLocalHost().getHostAddress();
