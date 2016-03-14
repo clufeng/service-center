@@ -55,6 +55,7 @@ public class Locator {
         idleTimeOutSeconds = _idleTimeOutSeconds;
 
         ice_config = _ice_config;
+
     }
 
     private static Communicator ic;
@@ -72,7 +73,11 @@ public class Locator {
         if(ic == null) {
             synchronized (Locator.class) {
                 if (ic == null) {
-                    ic = Ice.Util.initialize(new String[]{regitry_locator, ice_config});
+                    if (Locator.class.getClassLoader().getResource(ice_config) != null) {
+                        ic = Ice.Util.initialize(new String[]{regitry_locator, ice_config});
+                    } else {
+                        ic = Ice.Util.initialize(new String[]{regitry_locator});
+                    }
                     lastAccessTime = System.currentTimeMillis();
                     moniterThread = new Thread(new MoniterThread());
                     moniterThread.setDaemon(true);
