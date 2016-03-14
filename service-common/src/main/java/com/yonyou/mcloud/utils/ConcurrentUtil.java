@@ -15,12 +15,12 @@ public class ConcurrentUtil {
 
     private static Logger logger = LoggerFactory.getLogger(ConcurrentUtil.class);
 
-    public <T> T lock(String identify, Callable<T> run) {
+    public <T> T identifylock(String identify, Callable<T> run) {
 
         T result = null;
 
         while (true) {
-            if(MemcachedUtils.add(identify, identify, -1)) {
+            if(MemcachedUtils.add(identify, identify, 0)) {
                 try {
                     result = run.call();
                     break;
