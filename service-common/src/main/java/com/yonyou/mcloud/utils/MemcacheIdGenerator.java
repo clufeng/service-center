@@ -98,7 +98,7 @@ public class MemcacheIdGenerator implements DistributedIdGenerator {
 
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHH");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 
         String curr = formatter.format(new Date());
 
